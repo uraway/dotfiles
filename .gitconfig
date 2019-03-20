@@ -1,0 +1,68 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = uraway
+	email = masato.uraway@gmail.com
+[alias]
+    sync = !~/dotfiles/bin/git-sync.sh
+    update = !~/dotfiles/bin/git-sync.sh
+    unstage = reset -q HEAD --
+    discard = checkout --
+    nevermind = !git reset --hard HEAD && git clean -d -f
+    uncommit = reset --mixed HEAD~
+    save = commit -m
+    resave = commit --amend
+    fold = commit --amend --no-edit
+    invert = revert
+    last = log -1 HEAD --format=format:"%Cred%H"
+    copy-last-hash = !git last | pbcopy
+    summary = status -u -s
+    graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Creset• %<(75,trunc)%s (%cN, %ar) %Cred%d' --date-order
+    history = log -10 --format=format:'%Cgreen%h %Creset%s (%aN, %ar)'
+    new-branch = checkout -b
+    rename-branch = branch -m
+    delete-branch = branch -D
+    branches = branch
+    recent-branches = branch -a --sort=committerdate
+    tags = tag
+    stashes = stash list
+    prestage = diff
+    precommit = diff --cached
+    remotes = remote -v
+    move = mv
+    remove = rm
+    unmerged = branch --no-merged
+    unstash = stash pop
+    what = show
+    untrack = rm -r --cached
+    rewrite = rebase -i
+    amend = commit --amend --no-edit
+    amend-message = commit --amend
+    back = checkout "-"
+    contributors = shortlog -s -n --no-merges
+    file-trail = log --follow -p -w
+    merge-trail = log --ancestry-path --merges
+    unmerged = diff --name-only --diff-filter=U
+    patch = add --patch
+    tuck = stash save
+    current-branch = rev-parse --abbrev-ref HEAD
+    untuck = stash pop "stash@{0}"
+    boop = "!f() { B=$(git current-branch); git commit --allow-empty -m 'Boop!'; git push origin $B; }; f"
+    aliases = !git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\:\\ /
+    autotrack = "!f() { B=$(git current-branch); git branch --set-upstream-to=origin/$B; }; f"
+    into = "!f() { B=$(git current-branch); git checkout $1; git pull; git merge $B --no-edit; }; f"
+    into-staging = "!f() { B=$(git current-branch); git checkout staging; git pull; git merge $B --no-edit; }; f"
+    into-master = "!f() { B=$(git current-branch); git checkout master; git pull; git merge $B --no-edit; }; f"
+    work-log = !git log --reverse master...HEAD --format=format:'* %B' | pbcopy
+    submit = !git push && git autotrack
+    whodunit = blame -wMC
+    axe = log --reverse -p -w -S
+[gc]
+	auto = 0
+[fetch]
+	prune = true
+[core]
+	editor = code --wait
